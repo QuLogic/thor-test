@@ -26,16 +26,6 @@ void test(std::string filename, bool include_stroke, float scale) {
 	bg->fill(255, 255, 255, 255);
 	canvas->push(std::move(bg));
 
-	auto scene = tvg::Scene::gen();
-	result = scene->transform(
-		tvg::Matrix{
-			1, 0, 0,
-			0, -1, HEIGHT,
-			0, 0, 1,
-		}
-	);
-	check(result);
-
 	// Make a star shape for a clip path.
 	auto clip_path = tvg::Shape::gen();
 	check(clip_path->moveTo(320, 360));
@@ -60,10 +50,8 @@ void test(std::string filename, bool include_stroke, float scale) {
 		check(rect->stroke(0, 0, 0, 127));
 	}
 	check(rect->composite(std::move(clip_path), tvg::CompositeMethod::ClipPath));
-	check(scene->push(std::move(rect)));
+	check(canvas->push(std::move(rect)));
 
-	result = canvas->push(std::move(scene));
-	check(result);
 	result = canvas->draw();
 	check(result);
 	result = canvas->sync();
