@@ -18,8 +18,7 @@ void test(std::string filename, bool include_stroke, float scale) {
 	std::vector<std::uint32_t> buffer(WIDTH * HEIGHT);
 
 	auto canvas = tvg::SwCanvas::gen();
-	auto result = canvas->target(buffer.data(), WIDTH, WIDTH, HEIGHT, tvg::SwCanvas::ABGR8888S);
-	check(result);
+	check(canvas->target(buffer.data(), WIDTH, WIDTH, HEIGHT, tvg::SwCanvas::ABGR8888S));
 
 	auto bg = tvg::Shape::gen();
 	bg->appendRect(0, 0, WIDTH, HEIGHT);
@@ -52,10 +51,8 @@ void test(std::string filename, bool include_stroke, float scale) {
 	check(rect->composite(std::move(clip_path), tvg::CompositeMethod::ClipPath));
 	check(canvas->push(std::move(rect)));
 
-	result = canvas->draw();
-	check(result);
-	result = canvas->sync();
-	check(result);
+	check(canvas->draw());
+	check(canvas->sync());
 
 	if (!stbi_write_png(filename.c_str(), WIDTH, HEIGHT, 4, buffer.data(), 4 * WIDTH)) {
 		throw std::runtime_error(std::format("failed to write {}", filename));
@@ -63,14 +60,13 @@ void test(std::string filename, bool include_stroke, float scale) {
 }
 
 int main(void) {
-	auto result = tvg::Initializer::init(tvg::CanvasEngine::Sw, 1);
-	check(result);
+	check(tvg::Initializer::init(tvg::CanvasEngine::Sw, 1));
 
 	for(auto scale : std::vector{1.0, 1.1}) {
 		test(std::format("test{}-nostroke.png", scale), false, scale);
 		test(std::format("test{}-stroke.png", scale), true, scale);
 	}
 
-	tvg::Initializer::term(tvg::CanvasEngine::Sw);
+	check(tvg::Initializer::term(tvg::CanvasEngine::Sw));
 	return 0;
 }
