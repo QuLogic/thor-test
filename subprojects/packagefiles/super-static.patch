@@ -1,0 +1,26 @@
+commit f795ec451f9c736fe45908e57eb72d1cc1a62db2
+Author: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date:   Sun Jun 22 16:07:56 2025 -0400
+
+    Export TVG_STATIC to parent projects
+    
+    On Windows, you need to consistently set `__declspec` on symbols. This
+    is handled automatically in `thorvg.h` for shared libraries, and left
+    out entirely for static libraries by the `TVG_STATIC` define.
+    
+    When building as a subproject with static libraries, it is thus useful
+    to export `TVG_STATIC` to the parent project, or else `thorvg.h` will
+    attempt to set `__declspec` for a shared library, and linkage will fail.
+
+diff --git a/src/meson.build b/src/meson.build
+index 101bf269..08b0d93d 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -74,6 +74,7 @@ thorvg_lib = library(
+ )
+ 
+ thorvg_dep = declare_dependency(
++  compile_args: (lib_type == 'static') ? ['-DTVG_STATIC'] : [],
+   include_directories: thorvg_inc,
+   link_with: thorvg_lib,
+ )

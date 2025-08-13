@@ -1,0 +1,9 @@
+[wrap-file]
+directory = thorvg-0.15.14
+
+source_url = https://github.com/thorvg/thorvg/archive/v0.15.14/thorvg-0.15.14.tar.gz
+source_filename = thorvg-0.15.14.tar.gz
+source_hash = be48a782d8f65453a70e7181ae7373e05bb48b676ad14d5a0d644d4e16d1a575
+
+# https://github.com/thorvg/thorvg/pull/3565
+diff_files = super-static.patch
